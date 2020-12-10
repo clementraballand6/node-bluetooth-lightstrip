@@ -1,11 +1,17 @@
+const process = require('process');
 const deviceFinder = require('./BLELightstrip');
 
 (async () => {
     const device = await deviceFinder({
-        auto: true
+        debug: true
     });
 
-    console.log(device);
+    [`exit`, `SIGINT`, `SIGUSR1`, `SIGUSR2`, `uncaughtException`, `SIGTERM`].forEach((eventType) => {
+        process.on(eventType, () => {
+            device.disconnect();
+            process.exit(0);
+        });
+    })
 
     await device.connect();
     // await device.on();
@@ -19,6 +25,9 @@ const deviceFinder = require('./BLELightstrip');
 
     device.startBlinking(['ff0000', '00ff00', '0000ff']);
 
+    setTimeout(() => {
+        device.stopBlinking();
+    }, 2000);
     // await device.disconnect();
     // await device.color('0000ff');
 
