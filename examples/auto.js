@@ -1,5 +1,5 @@
 const process = require('process');
-const deviceFinder = require('./BLELightstrip');
+const deviceFinder = require('../index');
 
 (async () => {
     const device = await deviceFinder({
@@ -14,21 +14,11 @@ const deviceFinder = require('./BLELightstrip');
     })
 
     await device.connect();
-    // await device.on();
-    // await device.color('ff0000'); // red
-    // await device.color('00ff00'); // green
-    // await device.color('ff0000'); // red
-    // await device.color('00ff00'); // green
-    // await device.color('ff0000'); // red
-    // await device.color('00ff00'); // green
-    // await device.color('ff0000'); // red
+    await device.on();
 
     device.startBlinking(['ff0000', '00ff00', '0000ff']);
 
     setTimeout(() => {
         device.stopBlinking();
     }, 2000);
-    // await device.disconnect();
-    // await device.color('0000ff');
-
 })();
